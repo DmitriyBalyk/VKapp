@@ -9,7 +9,7 @@
 import UIKit
 import WebKit
 import Alamofire
-
+import RealmSwift
 
 final class FrendViewBounds: UIImageView {
     
@@ -31,20 +31,29 @@ class AllFriendsController: UITableViewController {
     @IBOutlet weak var searchBar: UISearchBar!
     
     //var friendSection = [Section]()
-    var friends2 = VkApiController()
-    var friends = [ResponseFriend.User]()
+    var friendsApi = VkApiController()
+    var friends = [User]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        getFriendsMethod { [weak self] friends in
-          self?.friends = friends
-           self?.tableView.reloadData()
-            print(friends)
-            
-        }
         //searchBar.delegate = self
         //sortedFriends(friends: ResponseFriend.User)
+        loadData()
+        friendsApi.getFriendsMethod  { [weak self] in
+            self?.loadData()
+            
+        }
+    }
+    
+    func loadData() {
+        do {
+            let realm = try Realm()
+            let users = realm.objects(User.self)
+            self.friends = Array(users)
+            tableView.reloadData()
+        } catch {
+            print(error)
+        }
     }
     //Займусь позже(боковой бар алфавитного поиска по буквам)
     /*override func sectionIndexTitles(for tableView: UITableView) -> [String]? {
@@ -56,13 +65,13 @@ class AllFriendsController: UITableViewController {
     }
     
     //override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        
-    //    return friendSection[section].title
-   // }
     
-   override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-  
-      return friends.count
+    //    return friendSection[section].title
+    // }
+    
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        
+        return friends.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -76,37 +85,38 @@ class AllFriendsController: UITableViewController {
         return cell
     }
     
+    
     /*func sortedFriends(friends: [ResponseFriend.User]) {
-        let userDictionary = Dictionary.init(grouping: friends)
-        { $0.name.prefix(1) }
-        friendSection = userDictionary.map {Section(title: String($0.key), items: $0.value)}
-        friendSection.sort {$0.title < $1.title }
-    }
-    
-}
-extension AllFriendsController: UISearchBarDelegate {
-    
-    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        let filteredGroups = friends2.filter({($0.name.lowercased().contains(searchText.lowercased()))})
-        sortedFriends(friends: filteredGroups)
-        tableView.reloadData()
-    }
-    
-    func searchBarCancelButtonClicked(_ searchBar:UISearchBar, textDidChange searchText: String) {
-        sortedFriends(friends: friends2)
-        tableView.reloadData()
-    }*/
+     let userDictionary = Dictionary.init(grouping: friends)
+     { $0.name.prefix(1) }
+     friendSection = userDictionary.map {Section(title: String($0.key), items: $0.value)}
+     friendSection.sort {$0.title < $1.title }
+     }
+     
+     }
+     extension AllFriendsController: UISearchBarDelegate {
+     
+     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+     let filteredGroups = friends2.filter({($0.name.lowercased().contains(searchText.lowercased()))})
+     sortedFriends(friends: filteredGroups)
+     tableView.reloadData()
+     }
+     
+     func searchBarCancelButtonClicked(_ searchBar:UISearchBar, textDidChange searchText: String) {
+     sortedFriends(friends: friends2)
+     tableView.reloadData()
+     }*/
     
 }
 
 
 //Альбом фоток по нажатию на фото "профиля"
 /*override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-    if segue.identifier == "imagesSegue" {
-        
-        if let indexPath = tableView.indexPathForSelectedRow {
-            let imagesVC = segue.destination as! ImagesCollectionViewController
-            imagesVC.photoFriendImage = friendSection[indexPath.section].items[indexPath.row].photo
-        }
-    }
-}*/
+ if segue.identifier == "imagesSegue" {
+ 
+ if let indexPath = tableView.indexPathForSelectedRow {
+ let imagesVC = segue.destination as! ImagesCollectionViewController
+ imagesVC.photoFriendImage = friendSection[indexPath.section].items[indexPath.row].photo
+ }
+ }
+ }*/

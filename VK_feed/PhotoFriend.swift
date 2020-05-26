@@ -1,5 +1,5 @@
 //
-//  Avatar.swift
+//  PhotoFriend.swift
 //  VK_feed
 //
 //  Created by Дмитрий Балык on 16.05.2020.

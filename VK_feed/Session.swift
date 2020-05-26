@@ -16,7 +16,7 @@ class Session {
     static let instance = Session()
     //свойства
     var token = ""
-    var userId = 21269005
+    var userId = 0
     var baseUrl = "https://api.vk.com"
     
 }
