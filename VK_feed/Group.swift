@@ -23,22 +23,21 @@ class Group: Object, Decodable {
     @objc dynamic var name: String = ""
     @objc dynamic var image: String = ""
     
-    enum ItemsKeys: String, CodingKey {
+    enum CodingKeys: String, CodingKey {
         case id = "id"
         case name = "name"
         case image = "photo_200"
     }
-    convenience required init(from decoder: Decoder) throws {
-        self.init()
-        let values = try decoder.container(keyedBy: ItemsKeys.self)
-        self.id = try values.decode(Int.self, forKey: .id)
-        self.name = try values.decode(String.self, forKey: .name)
-        self.image = try values.decode(String.self, forKey: .image)
-        
-    }
 }
 
-
+/*convenience required init(from decoder: Decoder) throws {
+    self.init()
+    let values = try decoder.container(keyedBy: ItemsKeys.self)
+    self.id = try values.decode(Int.self, forKey: .id)
+    self.name = try values.decode(String.self, forKey: .name)
+    self.image = try values.decode(String.self, forKey: .image)
+    
+}*/
 //struct allGroup: Equatable{
     
 //    var groupName: String

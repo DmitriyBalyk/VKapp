@@ -38,32 +38,6 @@ class Size: Object, Decodable {
     @objc dynamic var type: String
     @objc dynamic var url: String
 }
-
-
-/*struct ResponsePhoto: Decodable {
-    let response: Photo
-}
-struct Photo: Decodable {
-    var id = 0
-    var size = ""
-    var image = ""
-    
-    
-    enum CodingKeys: String, CodingKey {
-        case items
-        case sizes
-        
-    }
-    
-    enum ItemsKeys: String, CodingKey {
-        case id = "owner_id"
-        
-    }
-    
-    enum SizesKeys: String, CodingKey {
-        case size = "type"
-        case image = "url"
-    }*/
     
     /*required convenience init(from decoder: Decoder) throws {
         self.init()
@@ -74,32 +48,4 @@ struct Photo: Decodable {
        //let mainValues = try values.nestedContainer(keyedBy: WeatherKeys.self, forKey: .sizes)
         self.image = try values2.decode(String.self, forKey: .image)
         self.size = try values2.decode(String.self, forKey: .size)
-        
-    }*/
-
-/*struct ResponsePhoto: Decodable {
-    let response: ItemsPhoto
-}
-    struct ItemsPhoto: Decodable {
-        let items: [Photo]
-    }
-    
-    struct Photo: Decodable {
-        var id: Int = 0
-        var sizes: [Sizes]
-        
-        enum PhotoKeys: String, CodingKey {
-            case id = "owner_id"
-        }
-        
-    }
-    struct Sizes: Decodable {
-        var size: String = ""
-        var image: String = ""
-        
-        enum ItemsKeys: String, CodingKey {
-            case image = "url"
-            case size = "type"
-            
-        }
     }*/

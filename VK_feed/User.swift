@@ -25,25 +25,22 @@ class User: Object, Decodable {
     @objc dynamic  var lastName: String = ""
     @objc dynamic var image: String = ""
     
-    enum ItemsKeys: String, CodingKey {
+    enum CodingKeys: String, CodingKey {
         case id = "id"
         case firstName = "first_name"
         case lastName = "last_name"
         case image = "photo_50"
     }
-    
-    convenience required init(from decoder: Decoder) throws {
-        self.init()
-        let values = try decoder.container(keyedBy: ItemsKeys.self)
-        self.id = try values.decode(Int.self, forKey: .id)
-        self.firstName = try values.decode(String.self, forKey: .firstName)
-        self.lastName = try values.decode(String.self, forKey: .lastName)
-        self.image = try values.decode(String.self, forKey: .image)
-    }
-    
 }
 
-
+/*convenience required init(from decoder: Decoder) throws {
+    self.init()
+    let values = try decoder.container(keyedBy: ItemsKeys.self)
+    self.id = try values.decode(Int.self, forKey: .id)
+    self.firstName = try values.decode(String.self, forKey: .firstName)
+    self.lastName = try values.decode(String.self, forKey: .lastName)
+    self.image = try values.decode(String.self, forKey: .image)
+}*/
 
 /*struct Friends {
  var name: String
