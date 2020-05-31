@@ -9,19 +9,31 @@
 import UIKit
 import WebKit
 import Alamofire
+import RealmSwift
 
 class PhotoViewController: UICollectionViewController  {
     
     //var photos = [Friends(name: "Жирафик-Рафик", photo: UIImage(contentsOfFile: "2"))]
-    var photos2 = VkApiController()
+    var photosApi = VkApiController()
     var photos = [Item]()
+    var friendId = Int()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        getPhoto { [weak self] photos in
-            self?.photos = photos
+        loadData()
+        photosApi.getPhoto(ownerID: friendId) { [weak self]  in
+            self?.loadData()
             self?.collectionView.reloadData()
+        }
+    }
+    
+    func loadData() {
+        do {
+            let realm = try Realm()
+            let image = realm.objects(Item.self)
+            self.photos = Array(image)
+        } catch {
+            print(error)
         }
     }
     

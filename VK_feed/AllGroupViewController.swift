@@ -27,7 +27,7 @@ class AllGroupViewController: UITableViewController {
     @IBOutlet weak var searchBar: UISearchBar!
     
     
-    var filteredGroups = [ResponsGroup.Group]()
+    var filteredGroups = [Group]()
     var searching = false
     
     
