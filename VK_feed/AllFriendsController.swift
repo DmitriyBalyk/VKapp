@@ -31,29 +31,20 @@ class AllFriendsController: UITableViewController {
     @IBOutlet weak var searchBar: UISearchBar!
     
     //var friendSection = [Section]()
+    //Хранит коллекцию друзей, полученную из базы
+    var friends: Results<User>?
+    //Токен для уведомлений из базы
+    var token: NotificationToken?
     var friendsApi = VkApiController()
-    var friends = [User]()
+    //var friends = [User]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         //searchBar.delegate = self
         //sortedFriends(friends: ResponseFriend.User)
-        loadData()
-        friendsApi.getFriendsMethod  { [weak self] in
-            self?.loadData()
-            
-        }
-    }
-    
-    func loadData() {
-        do {
-            let realm = try Realm()
-            let users = realm.objects(User.self)
-            self.friends = Array(users)
-            tableView.reloadData()
-        } catch {
-            print(error)
-        }
+        friendsApi.getFriendsMethod()
+        pairTableAndRealm()
+        
     }
     //Займусь позже(боковой бар алфавитного поиска по буквам)
     /*override func sectionIndexTitles(for tableView: UITableView) -> [String]? {
@@ -61,7 +52,7 @@ class AllFriendsController: UITableViewController {
      }*/
     
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return friends.count
+        return friends!.count
     }
     
     //override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
@@ -71,18 +62,41 @@ class AllFriendsController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-        return friends.count
+        return friends!.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "AllFriendsCell", for: indexPath) as! AllFriendsCell
-        let friend = friends[indexPath.row]
-        let fullName = friend.firstName + " " + friend.lastName
-        let url = URL(string: friends[indexPath.row].image)
+        let friend = friends?[indexPath.row]
+        let fullName = friend!.firstName + " " + friend!.lastName
+        let url = URL(string: friends![indexPath.row].image)
         cell.photoFriendImage.image = UIImage(data: try! Data(contentsOf: url!))!
         cell.friendsLabel.text = fullName
         //cell.photo2.avatar.image = UIImage(named: friendSection[indexPath.section].items[indexPath.row].photo)
         return cell
+    }
+    //Получаем из базы друга и подписываемся на уведомления о ее изменении.
+    func pairTableAndRealm() {
+        guard let realm = try? Realm() else { return }
+        friends = realm.objects(User.self)
+        token = friends?.observe { [weak self] (changes: RealmCollectionChange) in
+            guard let tableView = self?.tableView else { return }
+            switch changes {
+            case .initial:
+                tableView.reloadData()
+            case .update(_, let deletions, let insertions, let modifications):
+                tableView.beginUpdates()
+                tableView.insertRows(at: insertions.map({ IndexPath(row: $0, section: 0) }),
+                                     with: .automatic)
+                tableView.deleteRows(at: deletions.map({ IndexPath(row: $0, section: 0)}),
+                                     with: .automatic)
+                tableView.reloadRows(at: modifications.map({ IndexPath(row: $0, section: 0) }),
+                                     with: .automatic)
+                tableView.endUpdates()
+            case .error(let error):
+                fatalError("\(error)")
+            }
+        }
     }
     
     

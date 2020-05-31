@@ -23,44 +23,34 @@ final class GroupViewBounds: UIImageView {
 
 class MyGroupViewController: UITableViewController {
     
+    //Хранит коллекцию групп, полученную из базы
+    var groups: Results<Group>?
+    //Токен для уведомлений из базы
+    var token: NotificationToken?
     var groupsApi = VkApiController()
-    var groups = [Group]()
+    //var groups = [Group]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        loadData()
-        groupsApi.getGroups { [weak self] in
-            self?.loadData()
-            
-        }
+        groupsApi.getGroups()
+        pairTableAndRealm()
     }
     
-    func loadData() {
-        do {
-            let realm = try Realm()
-            let group = realm.objects(Group.self)
-            self.groups = Array(group)
-            tableView.reloadData()
-        } catch {
-            print(error)
-        }
-    }
     
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return groups.count
+        return groups!.count
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 12 //groups.count
+        return groups!.count
     }
     
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "MeGroupViewCell", for: indexPath) as! MeGroupViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "MeGroupViewCell", for: indexPath) as! MyGroupViewCell
         
-        cell.groupLabel.text = groups[indexPath.row].name
-        let url = URL(string: groups[indexPath.row].image)
+        cell.groupLabel.text = groups![indexPath.row].name
+        let url = URL(string: groups![indexPath.row].image)
         cell.photoGrp.image = UIImage(data: try! Data(contentsOf: url!))!
         return cell
     }
@@ -77,15 +67,27 @@ class MyGroupViewController: UITableViewController {
     //  }
     //  }
     //}
-    override func tableView(
-        _ tableView: UITableView,
-        commit editingStyle: UITableViewCell.EditingStyle,
-        forRowAt indexPath: IndexPath) {
-        
-        
-        if editingStyle == .delete {
-            groups.remove(at: indexPath.row)
-            tableView.reloadData()
+    //Получаем из базы группу и подписываемся на уведомления о ее изменении.
+    func pairTableAndRealm() {
+        guard let realm = try? Realm() else { return }
+        groups = realm.objects(Group.self)
+        token = groups?.observe { [weak self] (changes: RealmCollectionChange) in
+            guard let tableView = self?.tableView else { return }
+            switch changes {
+            case .initial:
+                tableView.reloadData()
+            case .update(_, let deletions, let insertions, let modifications):
+                tableView.beginUpdates()
+                tableView.insertRows(at: insertions.map({ IndexPath(row: $0, section: 0) }),
+                                     with: .automatic)
+                tableView.deleteRows(at: deletions.map({ IndexPath(row: $0, section: 0)}),
+                                     with: .automatic)
+                tableView.reloadRows(at: modifications.map({ IndexPath(row: $0, section: 0) }),
+                                     with: .automatic)
+                tableView.endUpdates()
+            case .error(let error):
+                fatalError("\(error)")
+            }
         }
     }
 }
