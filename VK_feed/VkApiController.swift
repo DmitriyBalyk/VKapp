@@ -106,7 +106,7 @@ extension VkApiController: WKNavigationDelegate {
     
     
     //Получение списка друзей
-    func getFriendsMethod(completion: @escaping () -> Void)  {
+    func getFriendsMethod()  {
         let path = "/method/friends.get"
         let param: Parameters = ["access_token" : Session.instance.token,
                                  "extended" : 1,
@@ -118,7 +118,6 @@ extension VkApiController: WKNavigationDelegate {
                     let users = try! JSONDecoder().decode(ResponseFriend.self, from: value).response.items
                     self?.saveData(data: users)
                     print(Realm.Configuration.defaultConfiguration.fileURL!)
-                    completion()
         }
     }
     
@@ -141,7 +140,7 @@ extension VkApiController: WKNavigationDelegate {
     }
     
     //Получение групп текущего пользователя
-    func getGroups(completion: @escaping () -> Void) {
+    func getGroups() {
         let path = "/method/groups.get"
         let param: Parameters = ["access_token" : Session.instance.token,
                                  "extended" : 1,
@@ -152,7 +151,6 @@ extension VkApiController: WKNavigationDelegate {
                     let groups = try! JSONDecoder().decode(ResponsGroup.self, from: value).response.items
                     self?.saveData(data: groups)
                     print(Realm.Configuration.defaultConfiguration.fileURL!)
-                    completion()
         }
     }
     

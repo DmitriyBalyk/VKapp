@@ -1,5 +1,5 @@
 //
-//  MeGroupViewCell.swift
+//  MyGroupViewCell.swift
 //  VK_feed
 //
 //  Created by Дмитрий Балык on 02.04.2020.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-class MeGroupViewCell: UITableViewCell {
+class MyGroupViewCell: UITableViewCell {
     
     @IBOutlet weak var photoGrp: UIImageView!
     @IBOutlet weak var groupLabel: UILabel!
