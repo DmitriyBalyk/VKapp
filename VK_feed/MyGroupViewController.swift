@@ -10,6 +10,7 @@ import UIKit
 import WebKit
 import Alamofire
 import RealmSwift
+import FirebaseDatabase
 
 final class GroupViewBounds: UIImageView {
     
@@ -38,19 +39,19 @@ class MyGroupViewController: UITableViewController {
     
     
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return groups!.count
+        return groups?.count ?? 0
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return groups!.count
+        return groups?.count ?? 0
     }
     
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "MeGroupViewCell", for: indexPath) as! MyGroupViewCell
         
-        cell.groupLabel.text = groups![indexPath.row].name
-        let url = URL(string: groups![indexPath.row].image)
+        cell.groupLabel.text = groups?[indexPath.row].name
+        let url = URL(string: groups?[indexPath.row].image ?? "")
         cell.photoGrp.image = UIImage(data: try! Data(contentsOf: url!))!
         return cell
     }
