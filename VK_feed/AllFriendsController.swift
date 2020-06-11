@@ -10,6 +10,7 @@ import UIKit
 import WebKit
 import Alamofire
 import RealmSwift
+import FirebaseDatabase
 
 final class FrendViewBounds: UIImageView {
     
@@ -67,8 +68,8 @@ class AllFriendsController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "AllFriendsCell", for: indexPath) as! AllFriendsCell
-        let friend = friends?[indexPath.row]
-        let fullName = friend!.firstName + " " + friend!.lastName
+        let friend = friends![indexPath.row]
+        let fullName = friend.firstName + " " + friend.lastName
         let url = URL(string: friends![indexPath.row].image)
         cell.photoFriendImage.image = UIImage(data: try! Data(contentsOf: url!))!
         cell.friendsLabel.text = fullName

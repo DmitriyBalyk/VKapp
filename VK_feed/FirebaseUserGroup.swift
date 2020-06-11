@@ -1,5 +1,5 @@
 //
-//  FirebaseUser.swift
+//  FirebaseUserGroup.swift
 //  VK_feed
 //
 //  Created by Дмитрий Балык on 03.06.2020.
