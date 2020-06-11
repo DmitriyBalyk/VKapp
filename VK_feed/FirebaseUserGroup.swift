@@ -9,17 +9,38 @@
 import Foundation
 import Firebase
 
+class FoundGroup: Decodable {
+    let id: Int
+    let name: String
+    let photo50: String
+    
+    enum CodingKeys: String, CodingKey {
+        case id
+        case name
+        case photo50 = "photo_50"
+    }
+}
+
+class FoundGroupsData: Decodable {
+    let count: Int
+    let items: [FoundGroup]
+}
+
+class FoundGroupsResponse: Decodable {
+    let response: FoundGroupsData
+}
+
 class FirebaseUser {
     // 1
     let userId: Int
-    let groupId: Int
+    let groupName: String
     let ref: DatabaseReference?
     
-    init(userId: Int, groupId: Int) {
+    init(userId: Int, groupName: String) {
         // 2
         self.ref = nil
         self.userId = userId
-        self.groupId = groupId
+        self.groupName = groupName
     }
     
     init?(snapshot: DataSnapshot) {
@@ -27,20 +48,20 @@ class FirebaseUser {
         guard
             let value = snapshot.value as? [String: Any],
             let userId = value["userId"] as? Int,
-            let groupId = value["groupId"] as? Int else {
+            let groupName = value["groupName"] as? String else {
                 return nil
         }
         
         self.ref = snapshot.ref
         self.userId = userId
-        self.groupId = groupId
+        self.groupName = groupName
     }
     
     func toAnyObject() -> [String: Any] {
         // 4
         return [
             "userId": userId,
-            "groupId": groupId
+            "groupName": groupName
         ]
     }
 }
