@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		641909AC2442691300CD1DF3 /* News.swift in Sources */ = {isa = PBXBuildFile; fileRef = 641909AB2442691300CD1DF3 /* News.swift */; };
 		641909B02445123900CD1DF3 /* LoadIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 641909AF2445123900CD1DF3 /* LoadIndicator.swift */; };
+		6464F84E2486EE2900568FD6 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6464F84D2486EE2800568FD6 /* GoogleService-Info.plist */; };
+		6464F8502487C34600568FD6 /* FirebaseUserGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6464F84F2487C34600568FD6 /* FirebaseUserGroup.swift */; };
 		6470FF90243660BD00DB96B4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6470FF8F243660BD00DB96B4 /* AppDelegate.swift */; };
 		6470FF92243660BD00DB96B4 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6470FF91243660BD00DB96B4 /* SceneDelegate.swift */; };
 		6470FF9A243660BE00DB96B4 /* VK_feed.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 6470FF98243660BE00DB96B4 /* VK_feed.xcdatamodeld */; };
@@ -47,6 +49,8 @@
 		42F364575D2CD29CD8F91A3B /* Pods-VK_feed.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VK_feed.release.xcconfig"; path = "Target Support Files/Pods-VK_feed/Pods-VK_feed.release.xcconfig"; sourceTree = "<group>"; };
 		641909AB2442691300CD1DF3 /* News.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = News.swift; sourceTree = "<group>"; };
 		641909AF2445123900CD1DF3 /* LoadIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadIndicator.swift; sourceTree = "<group>"; };
+		6464F84D2486EE2800568FD6 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		6464F84F2487C34600568FD6 /* FirebaseUserGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseUserGroup.swift; sourceTree = "<group>"; };
 		6470FF8C243660BD00DB96B4 /* VK_feed.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VK_feed.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6470FF8F243660BD00DB96B4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		6470FF91243660BD00DB96B4 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -144,6 +148,7 @@
 				64BDC18A2466EF1C00D8ABFD /* News.storyboard */,
 				64BDC1882466EEFB00D8ABFD /* Group.storyboard */,
 				64BDC1862466EE9600D8ABFD /* Friend.storyboard */,
+				6464F84D2486EE2800568FD6 /* GoogleService-Info.plist */,
 				6470FFA0243660E800DB96B4 /* Info.plist */,
 				6470FF98243660BE00DB96B4 /* VK_feed.xcdatamodeld */,
 			);
@@ -154,9 +159,10 @@
 			isa = PBXGroup;
 			children = (
 				64A347EA243E5BBC006DC3B8 /* HeartButton.swift */,
-				647FC04B246F46F000CD0A7B /* PhotoFriend.swift */,
 				64A347E3243A646D006DC3B8 /* Shadow.swift */,
+				647FC04B246F46F000CD0A7B /* PhotoFriend.swift */,
 				6470FFB12436653E00DB96B4 /* User.swift */,
+				6464F84F2487C34600568FD6 /* FirebaseUserGroup.swift */,
 				6470FFC12437731300DB96B4 /* Group.swift */,
 				641909AB2442691300CD1DF3 /* News.swift */,
 				641909AF2445123900CD1DF3 /* LoadIndicator.swift */,
@@ -271,6 +277,7 @@
 				6470FFA92436628D00DB96B4 /* Assets.xcassets in Resources */,
 				6470FFA72436624B00DB96B4 /* Main.storyboard in Resources */,
 				64BDC1892466EEFB00D8ABFD /* Group.storyboard in Resources */,
+				6464F84E2486EE2900568FD6 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -331,6 +338,7 @@
 				6470FFB824366A8A00DB96B4 /* AllGroupViewCell.swift in Sources */,
 				6470FFC02436868300DB96B4 /* PhotoViewCell.swift in Sources */,
 				6470FFBE2436865A00DB96B4 /* PhotoViewController.swift in Sources */,
+				6464F8502487C34600568FD6 /* FirebaseUserGroup.swift in Sources */,
 				647FC04C246F46F000CD0A7B /* PhotoFriend.swift in Sources */,
 				6470FFC22437731300DB96B4 /* Group.swift in Sources */,
 				6470FF9A243660BE00DB96B4 /* VK_feed.xcdatamodeld in Sources */,

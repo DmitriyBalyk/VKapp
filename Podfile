@@ -8,7 +8,8 @@ target 'VK_feed' do
 pod 'Alamofire', '~> 5.1'
 
 pod 'RealmSwift'
-
+pod 'Firebase/Core'
+pod 'Firebase/Database'
   # Pods for VK_feed
 
 end

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16096" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Q5K-hY-c9q">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16097" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Q5K-hY-c9q">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16086"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="collection view cell content view" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -150,7 +150,7 @@
                                     <outlet property="buttonVerticalCostraint" destination="4fe-Gu-Oxa" id="tcI-xn-n4A"/>
                                     <outlet property="friendsLabel" destination="zvc-he-u8h" id="TQj-Nt-d6a"/>
                                     <outlet property="photoFriendImage" destination="206-de-fML" id="rcm-ZZ-Oba"/>
-                                    <segue destination="Hym-U9-OiF" kind="show" id="YkD-GW-IFR"/>
+                                    <segue destination="Hym-U9-OiF" kind="presentation" modalPresentationStyle="fullScreen" id="krY-AF-cYk"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>

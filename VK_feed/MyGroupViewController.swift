@@ -10,6 +10,7 @@ import UIKit
 import WebKit
 import Alamofire
 import RealmSwift
+import FirebaseDatabase
 
 final class GroupViewBounds: UIImageView {
     
@@ -30,43 +31,67 @@ class MyGroupViewController: UITableViewController {
     var groupsApi = VkApiController()
     //var groups = [Group]()
     
+    private var userGroup = [FirebaseUser]()
+    private let ref = Database.database().reference(withPath: "userGroup")
+    
+    var controlRefresh = UIRefreshControl()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         groupsApi.getGroups()
         pairTableAndRealm()
+        addRefreshControl()
     }
     
-    
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return groups!.count
+        return groups?.count ?? 0
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return groups!.count
+        return groups?.count ?? 0
     }
     
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "MeGroupViewCell", for: indexPath) as! MyGroupViewCell
         
-        cell.groupLabel.text = groups![indexPath.row].name
-        let url = URL(string: groups![indexPath.row].image)
+        cell.groupLabel.text = groups?[indexPath.row].name
+        let url = URL(string: groups?[indexPath.row].image ?? "")
         cell.photoGrp.image = UIImage(data: try! Data(contentsOf: url!))!
         return cell
     }
     
-    //@IBAction func addGroup(segue: UIStoryboardSegue) {
-    //     if segue.identifier == "addGroup" {
-    //      let allGroupViewController = segue.source as! AllGroupViewController
+    func addRefreshControl (){
+        controlRefresh.attributedTitle = NSAttributedString(string: "update")
+        controlRefresh.addTarget(self, action: #selector(refreshTable), for: .valueChanged)
+        tableView.addSubview(controlRefresh)
+    }
     
-    //      if let indexPath = allGroupViewController.tableView.indexPathForSelectedRow {
-    //       let group = allGroupViewController.filteredGroups[indexPath.row]
-    //      if !groups.contains(group) {
-    //         groups.append(group)
-    //     tableView.reloadData()
-    //  }
-    //  }
-    //}
+    @objc func refreshTable (){
+        print("Start")
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+            self.controlRefresh.endRefreshing()
+        }
+    }
+    
+    @IBAction func addGroup(segue: UIStoryboardSegue) {
+        if segue.identifier == "addGroup" {
+            let allGroupViewController = segue.source as! AllGroupViewController
+            
+            if let indexPath = allGroupViewController.tableView.indexPathForSelectedRow {
+                // Получаем   группу по индексу
+                let group = allGroupViewController.filteredGroups[indexPath.row]
+                // Проверяем, что такой группы нет в списке
+                let userGroup = FirebaseUser(userId: Session.instance.userId, groupName: group.name)
+                let ref = String(group.name) + " (" + String(Session.instance.userId) + ")"
+                let userGroupRef = self.ref.child(ref)
+                userGroupRef.setValue(userGroup.toAnyObject())
+                
+            }
+        }
+    }
+    
     //Получаем из базы группу и подписываемся на уведомления о ее изменении.
     func pairTableAndRealm() {
         guard let realm = try? Realm() else { return }

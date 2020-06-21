@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Alamofire
 
 final class SearchGroupViewBounds: UIImageView {
     
@@ -27,58 +28,87 @@ class AllGroupViewController: UITableViewController {
     @IBOutlet weak var searchBar: UISearchBar!
     
     
-    var filteredGroups = [Group]()
-    var searching = false
+    var filteredGroups = [FoundGroup]()
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
-       // searchBar.delegate = self
+        searchBar.delegate = self
     }
-    
     
     override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-  //      if searching {
-       //     return filteredGroups.count
-     //   }
+        //      if searching {
+        //     return filteredGroups.count
+        //   }
         return filteredGroups.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "AllGroupViewCell", for: indexPath) as! AllGroupViewCell
         //let group = groups[indexPath.row]
-   //     let group: ResponsGroup.Group
-     //   if searching {
-      //      group = filteredGroups[indexPath.row]
-      //  } else {
-      //      group = groups[indexPath.row]
-     //   }
+        //     let group: ResponsGroup.Group
+        //   if searching {
+        //      group = filteredGroups[indexPath.row]
+        //  } else {
+        //      group = groups[indexPath.row]
+        //   }
         cell.allGroupName.text = filteredGroups[indexPath.row].name
-         let url = URL(string: filteredGroups[indexPath.row].image)
-               cell.photoGroup.image = UIImage(data: try! Data(contentsOf: url!))!
+        let url = URL(string: filteredGroups[indexPath.row].photo50)
+        cell.photoGroup.image = UIImage(data: try! Data(contentsOf: url!))!
         return cell
+    }
+}
+extension AllGroupViewController: UISearchBarDelegate {
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        
+        print(searchText.lowercased())
+        //поиск групп
+        AF.request("https://api.vk.com/method/groups.search",
+                   parameters: [
+                    "access_token" : Session.instance.token,
+                    "q": searchText.lowercased(),
+                    "sort" : "0",
+                    "v" : "5.103"
+        ]).responseData {
+            response in
+            guard let data = response.value else {return}
+            do {
+                let dataFoundGroups =  try JSONDecoder().decode(FoundGroupsResponse.self, from:
+                    data).response.items
+                self.filteredGroups = dataFoundGroups
+                print(dataFoundGroups)
+            }
+            catch {
+                print(error)
+            }
+        }
+        tableView.reloadData()
+    }
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        view.endEditing(true)
     }
 }
 
 /*extension AllGroupViewController: UISearchBarDelegate {
-    
-    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        filteredGroups = filteredGroups.filter({ (group: allGroup) -> Bool in
-            return group.groupName.lowercased().contains(searchText.lowercased())
-        })
-        searching = true
-        tableView.reloadData()
-    }
-    
-    func searchBarCancelButtonClicked(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        filteredGroups = filteredGroups.filter({ (group: allGroup) -> Bool in
-            return group.groupName.lowercased().contains(searchText.lowercased())
-        })
-        searching = true
-        tableView.reloadData()
-    }
-}*/
+ 
+ func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+ filteredGroups = filteredGroups.filter({ (group: allGroup) -> Bool in
+ return group.groupName.lowercased().contains(searchText.lowercased())
+ })
+ searching = true
+ tableView.reloadData()
+ }
+ 
+ func searchBarCancelButtonClicked(_ searchBar: UISearchBar, textDidChange searchText: String) {
+ filteredGroups = filteredGroups.filter({ (group: allGroup) -> Bool in
+ return group.groupName.lowercased().contains(searchText.lowercased())
+ })
+ searching = true
+ tableView.reloadData()
+ }
+ }*/
