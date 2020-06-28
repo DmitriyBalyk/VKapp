@@ -262,7 +262,7 @@
         <scene sceneID="v4b-lE-a0T">
             <objects>
                 <viewControllerPlaceholder storyboardName="Friend" id="8Gr-Lv-jRI" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Friends" id="gpZ-pi-iHY"/>
+                    <tabBarItem key="tabBarItem" title="Items" id="gpZ-pi-iHY"/>
                 </viewControllerPlaceholder>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="pme-9d-0n7" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -272,7 +272,7 @@
         <scene sceneID="Yzb-Ze-g6I">
             <objects>
                 <viewControllerPlaceholder storyboardName="Group" id="IP4-rV-gLE" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Groups" id="ynC-HF-s35"/>
+                    <tabBarItem key="tabBarItem" title="Items" id="ynC-HF-s35"/>
                 </viewControllerPlaceholder>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="n3q-kA-JS0" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -282,7 +282,7 @@
         <scene sceneID="lGG-IQ-Fr9">
             <objects>
                 <viewControllerPlaceholder storyboardName="News" id="daY-Wx-UAi" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="News" id="y8t-fh-Xr2"/>
+                    <tabBarItem key="tabBarItem" title="Items" id="y8t-fh-Xr2"/>
                 </viewControllerPlaceholder>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="J9e-ob-deX" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>

@@ -19,11 +19,16 @@ final class NewsViewBounds: UIImageView {
 
 class NewsController: UITableViewController {
     
-    let news = NewsFeed.publicationNews()
+    let news2 = VkApiController()
+    var news = [NewsFeed]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+    }
+    
+    override func numberOfSections(in tableView: UITableView) -> Int {
+        return news.count
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -33,10 +38,9 @@ class NewsController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "NewsCell", for: indexPath) as! NewsCell
         
-        cell.name.text = news[indexPath.row].name
-        cell.avatar.image = news[indexPath.row].avatar
-        cell.img.image = news[indexPath.row].photo
-        cell.comment.text = news[indexPath.row].text
+        let new = news[indexPath.row]
+        cell.configure(with: new)
+        
         
         let rightNow = Date()
         let calendar = Calendar.current

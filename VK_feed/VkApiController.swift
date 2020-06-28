@@ -15,7 +15,7 @@ import RealmSwift
 class VkApiController: UIViewController{
     
     
-    @IBOutlet weak var webView: WKWebView! {
+    @IBOutlet private weak var webView: WKWebView! {
         didSet{
             webView.navigationDelegate = self
         }
@@ -32,7 +32,7 @@ class VkApiController: UIViewController{
             URLQueryItem(name: "client_id", value: "7464677"),
             URLQueryItem(name: "display", value: "mobile"),
             URLQueryItem(name: "redirect_uri", value: "https://oauth.vk.com/blank.html"),
-            URLQueryItem(name: "scope", value: "262150"),
+            URLQueryItem(name: "scope", value: "270342"), //270342 262150
             URLQueryItem(name: "response_type", value: "token"),
             URLQueryItem(name: "v", value: "5.103")
         ]
@@ -167,5 +167,20 @@ extension VkApiController: WKNavigationDelegate {
                     print(value)
         }
     }
-    // ["user_id": "21269005", "expires_in": "0", "access_token": "9921f63bf01e20fdc6253117962061e8f04de59d344ed8c2d4865a78618c61abcaa171bcc064e219f9279"]
+    func getNews(completion: @escaping ([NewsFeed]) -> Void) {
+        
+        let methodUrl = "/newsfeed.get"
+        let parameters: Parameters = [
+            "user_ids" : "\(Session.instance.userId)",
+            "access_token" : Session.instance.token,
+            "filters" : "post",
+            "v" : "5.68"
+        ]
+        
+        AF.request(Session.instance.baseUrl + methodUrl, method: .get, parameters: parameters).responseData(queue: DispatchQueue.global()) { response in
+            guard let data = response.value else { return }
+            let news = try! JSONDecoder().decode(NewsResponse.self, from: data).response.items
+            completion(news)
+        }
+    }
 }

@@ -24,7 +24,7 @@ final class SearchGroupViewBounds: UIImageView {
 
 class AllGroupViewController: UITableViewController {
     
-    @IBOutlet weak var searchBar: UISearchBar!
+    @IBOutlet private weak var searchBar: UISearchBar!
     
     
     var filteredGroups = [Group]()
@@ -59,7 +59,7 @@ class AllGroupViewController: UITableViewController {
      //   }
         cell.allGroupName.text = filteredGroups[indexPath.row].name
          let url = URL(string: filteredGroups[indexPath.row].image)
-               cell.photoGroup.image = UIImage(data: try! Data(contentsOf: url!))!
+               cell.photoGroup.image = UIImage(data: try! Data(contentsOf: url!))! 
         return cell
     }
 }
