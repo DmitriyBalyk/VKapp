@@ -33,17 +33,17 @@ class MyGroupViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        groupsApi.getGroups()
+        groupsApi.getGroups(controller: self)
         pairTableAndRealm()
     }
     
     
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return groups!.count
+        return groups?.count ?? 0
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return groups!.count
+        return groups?.count ?? 0
     }
     
     
@@ -52,7 +52,7 @@ class MyGroupViewController: UITableViewController {
         
         cell.groupLabel.text = groups?[indexPath.row].name
         let url = URL(string: groups?[indexPath.row].image ?? "")
-        cell.photoGrp.image = UIImage(data: try! Data(contentsOf: url!))! 
+        cell.photoGrp.image = UIImage(data: try! Data(contentsOf: url!))
         return cell
     }
     

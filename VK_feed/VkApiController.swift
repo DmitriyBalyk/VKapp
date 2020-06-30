@@ -140,18 +140,31 @@ extension VkApiController: WKNavigationDelegate {
     }
     
     //Получение групп текущего пользователя
-    func getGroups() {
+    func getGroups(controller: MyGroupViewController) {
         let path = "/method/groups.get"
         let param: Parameters = ["access_token" : Session.instance.token,
                                  "extended" : 1,
                                  "v" : "5.103"]
-        AF.request(Session.instance.baseUrl + path, method: .get,
+        let request = AF.request(Session.instance.baseUrl + path, method: .get, parameters: param)
+        let queue = OperationQueue()
+
+        let getDataOperation = GetDataOperation(request: request)
+        queue.addOperation(getDataOperation)
+
+        let parseGroupsData = ParseGroupsData()
+        parseGroupsData.addDependency(getDataOperation)
+
+        let reloadGroupsTable = ReloadGroupsTable(controller: controller)
+        reloadGroupsTable.addDependency(parseGroupsData)
+        OperationQueue.main.addOperation(reloadGroupsTable)
+        
+        /*         AF.request(Session.instance.baseUrl + path, method: .get,
                    parameters: param).responseData { [weak self] response in
                     guard let value = response.value else { return }
                     let groups = try! JSONDecoder().decode(ResponsGroup.self, from: value).response.items
                     self?.saveData(data: groups)
                     print(Realm.Configuration.defaultConfiguration.fileURL!)
-        }
+        }*/
     }
     
     //Получение групп по поисковому запросу

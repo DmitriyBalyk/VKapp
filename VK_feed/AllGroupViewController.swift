@@ -59,7 +59,7 @@ class AllGroupViewController: UITableViewController {
      //   }
         cell.allGroupName.text = filteredGroups[indexPath.row].name
          let url = URL(string: filteredGroups[indexPath.row].image)
-               cell.photoGroup.image = UIImage(data: try! Data(contentsOf: url!))! 
+        cell.photoGroup.image = UIImage(data: try! Data(contentsOf: url!))
         return cell
     }
 }
