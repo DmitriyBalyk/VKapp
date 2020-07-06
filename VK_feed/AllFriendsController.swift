@@ -7,9 +7,9 @@
 //
 
 import UIKit
-import WebKit
 import Alamofire
 import RealmSwift
+import PromiseKit
 
 final class FrendViewBounds: UIImageView {
     
@@ -43,6 +43,10 @@ class AllFriendsController: UITableViewController {
         //searchBar.delegate = self
         //sortedFriends(friends: ResponseFriend.User)
         friendsApi.getFriendsMethod()
+        .get { [weak self] users in
+                guard let self = self else { return }
+                self.friendsApi.saveData(data: users)
+        }
         pairTableAndRealm()
         
     }
@@ -52,7 +56,7 @@ class AllFriendsController: UITableViewController {
      }*/
     
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return friends!.count
+        return friends?.count ?? 0
     }
     
     //override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
@@ -62,7 +66,7 @@ class AllFriendsController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-        return friends!.count
+        return friends?.count ?? 0
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

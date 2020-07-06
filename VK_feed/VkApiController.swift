@@ -10,7 +10,7 @@ import UIKit
 import WebKit
 import Alamofire
 import RealmSwift
-
+import PromiseKit
 
 class VkApiController: UIViewController{
     
@@ -106,19 +106,33 @@ extension VkApiController: WKNavigationDelegate {
     
     
     //Получение списка друзей
-    func getFriendsMethod()  {
+    func getFriendsMethod()  -> Promise<[User]> {
         let path = "/method/friends.get"
         let param: Parameters = ["access_token" : Session.instance.token,
                                  "extended" : 1,
                                  "fields": "domain, photo_50, nickname",
                                  "v" : "5.103"]
-        AF.request(Session.instance.baseUrl + path, method: .get,
-                   parameters: param).responseData { [weak self] response in
-                    guard let value = response.value else { return }
-                    let users = try! JSONDecoder().decode(ResponseFriend.self, from: value).response.items
-                    self?.saveData(data: users)
-                    print(Realm.Configuration.defaultConfiguration.fileURL!)
+        let promise = Promise<[User]> { resolver in
+            AF.request(Session.instance.baseUrl + path, method: .get, parameters: param).responseData() { response in
+                switch response.result {
+                case .success(_):
+                    guard let data = response.value else { return }
+                    let users = try! JSONDecoder().decode(ResponseFriend.self, from: data).response.items
+                    resolver.fulfill(users)
+                case .failure(let error):
+                    resolver.reject(error)
+                }
+                
+            }
         }
+        return promise
+        /*AF.request(Session.instance.baseUrl + path, method: .get,
+         parameters: param).responseData { [weak self] response in
+         guard let value = response.value else { return }
+         let users = try! JSONDecoder().decode(ResponseFriend.self, from: value).response.items
+         self?.saveData(data: users)
+         print(Realm.Configuration.defaultConfiguration.fileURL!)
+         }*/
     }
     
     //Получение фотографий человека
@@ -147,24 +161,24 @@ extension VkApiController: WKNavigationDelegate {
                                  "v" : "5.103"]
         let request = AF.request(Session.instance.baseUrl + path, method: .get, parameters: param)
         let queue = OperationQueue()
-
+        
         let getDataOperation = GetDataOperation(request: request)
         queue.addOperation(getDataOperation)
-
+        
         let parseGroupsData = ParseGroupsData()
         parseGroupsData.addDependency(getDataOperation)
-
+        
         let reloadGroupsTable = ReloadGroupsTable(controller: controller)
         reloadGroupsTable.addDependency(parseGroupsData)
         OperationQueue.main.addOperation(reloadGroupsTable)
         
         /*         AF.request(Session.instance.baseUrl + path, method: .get,
-                   parameters: param).responseData { [weak self] response in
-                    guard let value = response.value else { return }
-                    let groups = try! JSONDecoder().decode(ResponsGroup.self, from: value).response.items
-                    self?.saveData(data: groups)
-                    print(Realm.Configuration.defaultConfiguration.fileURL!)
-        }*/
+         parameters: param).responseData { [weak self] response in
+         guard let value = response.value else { return }
+         let groups = try! JSONDecoder().decode(ResponsGroup.self, from: value).response.items
+         self?.saveData(data: groups)
+         print(Realm.Configuration.defaultConfiguration.fileURL!)
+         }*/
     }
     
     //Получение групп по поисковому запросу

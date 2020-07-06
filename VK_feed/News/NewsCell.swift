@@ -39,12 +39,12 @@ class NewsCell: UITableViewCell {
         
     }
     func configure(with new: NewsFeed) {
-         textPost.text = new.text
-         viewCounter.text = String(new.views)
-         repostCounter.text = String(new.reposts)
-         commentCounter.text = String(new.comments)
-         heartCounter.text = String(new.likes)
-     }
+        textPost.text = new.text
+        viewCounter.text = String(new.views)
+        repostCounter.text = String(new.reposts)
+        commentCounter.text = String(new.comments)
+        heartCounter.text = String(new.likes)
+    }
     
     @IBAction private func like() {
         UIView.transition( //анимация сердца

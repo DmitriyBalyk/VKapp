@@ -14,7 +14,7 @@ struct NewsResponse: Decodable {
 }
 struct ItemNews: Decodable {
     let items: [NewsFeed]
-
+    
     enum CodingKeys: String, CodingKey {
         case items
     }
@@ -29,7 +29,7 @@ class NewsFeed: Decodable {
     let likes = 0
     let reposts = 0
     let views = 0
-
+    
     enum CodingKeys: String, CodingKey {
         case sourceID = "source_id"
         case date
@@ -49,7 +49,7 @@ class Photos: Decodable {
     let id, ownerID: Int
     let sizes: [Size]
     let userID: Int
-
+    
     enum CodingKeys: String, CodingKey {
         case id
         case ownerID = "owner_id"
@@ -61,7 +61,7 @@ class Photos: Decodable {
 class Sizes: Decodable {
     let url: String
     let type: String
-
+    
 }
 
 
@@ -69,17 +69,17 @@ class Sizes: Decodable {
 
 
 /*struct News {
-    var avatar, photo: UIImage?
-    var name, text: String
-    var date: Date?
-}
-
-final class NewsFeed {
-    static func publicationNews() -> [News] {
-        let news1 = News(avatar: UIImage(named: "1"), photo: UIImage(named: "4"), name: "Вася", text: "текст текст текст текст текст текст текст текст текст текст текст текст ", date: nil)
-        let news2 = News(avatar: UIImage(named: "1"), photo: UIImage(named: "4"), name: "Петя", text: "текст текст текст текст текст текст текст текст текст текст текст текс текст текст текст текст текст текст текст текст текст текст текст текст", date: nil)
-        let news3 = News(avatar: UIImage(named: "1"), photo: UIImage(named: "1"), name: "Вова", text: "текст текст текст текст текст текст текст текст текст текст текст текст ", date: nil)
-        let news4 = News(avatar: UIImage(named: "1"), photo: UIImage(named: "6"), name: "Катя", text: "текст текст текст текст текст текст текст текст текст текст текст текс текст текст текст текст текст текст текст текст текст текст текст текст", date: nil)
-        return [news1, news2, news3, news4]
-    }
-}*/
+ var avatar, photo: UIImage?
+ var name, text: String
+ var date: Date?
+ }
+ 
+ final class NewsFeed {
+ static func publicationNews() -> [News] {
+ let news1 = News(avatar: UIImage(named: "1"), photo: UIImage(named: "4"), name: "Вася", text: "текст текст текст текст текст текст текст текст текст текст текст текст ", date: nil)
+ let news2 = News(avatar: UIImage(named: "1"), photo: UIImage(named: "4"), name: "Петя", text: "текст текст текст текст текст текст текст текст текст текст текст текс текст текст текст текст текст текст текст текст текст текст текст текст", date: nil)
+ let news3 = News(avatar: UIImage(named: "1"), photo: UIImage(named: "1"), name: "Вова", text: "текст текст текст текст текст текст текст текст текст текст текст текст ", date: nil)
+ let news4 = News(avatar: UIImage(named: "1"), photo: UIImage(named: "6"), name: "Катя", text: "текст текст текст текст текст текст текст текст текст текст текст текс текст текст текст текст текст текст текст текст текст текст текст текст", date: nil)
+ return [news1, news2, news3, news4]
+ }
+ }*/
