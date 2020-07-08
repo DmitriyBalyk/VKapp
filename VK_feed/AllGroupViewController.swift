@@ -29,11 +29,12 @@ class AllGroupViewController: UITableViewController {
     
     var filteredGroups = [Group]()
     var searching = false
-    
+    var photoService: PhotoService?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-       // searchBar.delegate = self
+        photoService = PhotoService(container: tableView)
+        // searchBar.delegate = self
     }
     
     
@@ -42,43 +43,44 @@ class AllGroupViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-  //      if searching {
-       //     return filteredGroups.count
-     //   }
+        //      if searching {
+        //     return filteredGroups.count
+        //   }
         return filteredGroups.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "AllGroupViewCell", for: indexPath) as! AllGroupViewCell
         //let group = groups[indexPath.row]
-   //     let group: ResponsGroup.Group
-     //   if searching {
-      //      group = filteredGroups[indexPath.row]
-      //  } else {
-      //      group = groups[indexPath.row]
-     //   }
-        cell.allGroupName.text = filteredGroups[indexPath.row].name
-         let url = URL(string: filteredGroups[indexPath.row].image)
-        cell.photoGroup.image = UIImage(data: try! Data(contentsOf: url!))
+        //     let group: ResponsGroup.Group
+        //   if searching {
+        //      group = filteredGroups[indexPath.row]
+        //  } else {
+        //      group = groups[indexPath.row]
+        //   }
+        let group = filteredGroups[indexPath.row]
+        let url = group.image
+        guard let image = photoService?.photo(atIndexpath: indexPath, byUrl: url) else { return cell }
+        cell.configure(with: group, image: image)
         return cell
     }
 }
 
 /*extension AllGroupViewController: UISearchBarDelegate {
-    
-    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        filteredGroups = filteredGroups.filter({ (group: allGroup) -> Bool in
-            return group.groupName.lowercased().contains(searchText.lowercased())
-        })
-        searching = true
-        tableView.reloadData()
-    }
-    
-    func searchBarCancelButtonClicked(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        filteredGroups = filteredGroups.filter({ (group: allGroup) -> Bool in
-            return group.groupName.lowercased().contains(searchText.lowercased())
-        })
-        searching = true
-        tableView.reloadData()
-    }
-}*/
+ 
+ func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+ filteredGroups = filteredGroups.filter({ (group: allGroup) -> Bool in
+ return group.groupName.lowercased().contains(searchText.lowercased())
+ })
+ searching = true
+ tableView.reloadData()
+ }
+ 
+ func searchBarCancelButtonClicked(_ searchBar: UISearchBar, textDidChange searchText: String) {
+ filteredGroups = filteredGroups.filter({ (group: allGroup) -> Bool in
+ return group.groupName.lowercased().contains(searchText.lowercased())
+ })
+ searching = true
+ tableView.reloadData()
+ }
+ }*/

@@ -36,16 +36,20 @@ class AllFriendsController: UITableViewController {
     //Токен для уведомлений из базы
     var token: NotificationToken?
     var friendsApi = VkApiController()
+    var photoService: PhotoService?
     //var friends = [User]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         //searchBar.delegate = self
         //sortedFriends(friends: ResponseFriend.User)
+        photoService = PhotoService(container: tableView)
         friendsApi.getFriendsMethod()
-        .get { [weak self] users in
+            .get { [weak self] users in
                 guard let self = self else { return }
                 self.friendsApi.saveData(data: users)
+        }.catch { error in
+            print(error)
         }
         pairTableAndRealm()
         
@@ -71,11 +75,12 @@ class AllFriendsController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "AllFriendsCell", for: indexPath) as! AllFriendsCell
-        let friend = friends?[indexPath.row]
-        let fullName = friend!.firstName + " " + friend!.lastName
-        let url = URL(string: friends![indexPath.row].image)
-        cell.photoFriendImage.image = UIImage(data: try! Data(contentsOf: url!))!
-        cell.friendsLabel.text = fullName
+        guard let friend = friends?[indexPath.row] else { return cell }
+        let url = friend.image 
+        guard let image = photoService?.photo(atIndexpath: indexPath, byUrl: url) else { return cell }
+        cell.configure(with: friend, image: image)
+        let fullName = friend.firstName + " " + friend.lastName
+        cell.friendsLabel.text = fullName 
         //cell.photo2.avatar.image = UIImage(named: friendSection[indexPath.section].items[indexPath.row].photo)
         return cell
     }

@@ -194,6 +194,7 @@ extension VkApiController: WKNavigationDelegate {
                     print(value)
         }
     }
+    
     func getNews(completion: @escaping ([NewsFeed]) -> Void) {
         
         let methodUrl = "/newsfeed.get"

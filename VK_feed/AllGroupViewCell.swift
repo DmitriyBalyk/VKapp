@@ -11,7 +11,11 @@ import UIKit
 
 class AllGroupViewCell: UITableViewCell {
 
-    @IBOutlet weak var allGroupName: UILabel!
-    @IBOutlet weak var photoGroup: SearchGroupViewBounds!
+    @IBOutlet private weak var allGroupName: UILabel!
+    @IBOutlet private weak var photoGroup: SearchGroupViewBounds!
     
+    func configure(with group: Group, image: UIImage) {
+        photoGroup.image = image
+        allGroupName.text = group.name
+    }
 }

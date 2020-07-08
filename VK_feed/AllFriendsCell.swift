@@ -11,7 +11,7 @@ import UIKit
 class AllFriendsCell: UITableViewCell {
     
     @IBOutlet weak var friendsLabel: UILabel!
-    @IBOutlet weak var photoFriendImage: UIImageView!
+    @IBOutlet private weak var photoFriendImage: UIImageView!
     
     @IBOutlet weak var buttonHorizontallyConstr: NSLayoutConstraint!
     @IBOutlet weak var buttonVerticalCostraint: NSLayoutConstraint!
@@ -30,5 +30,12 @@ class AllFriendsCell: UITableViewCell {
         }, completion: { _ in
             self.photoFriendImage.transform = .identity
         })
+    }
+    
+    func configure(with friend: User, image: UIImage) {
+        photoFriendImage.image = image
+        friendsLabel.text = friend.firstName
+        friendsLabel.text = friend.lastName
+        
     }
 }

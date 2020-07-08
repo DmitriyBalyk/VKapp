@@ -10,8 +10,8 @@ import UIKit
 
 class MyGroupViewCell: UITableViewCell {
     
-    @IBOutlet weak var photoGrp: UIImageView!
-    @IBOutlet weak var groupLabel: UILabel!
+    @IBOutlet private weak var photoGrp: UIImageView!
+    @IBOutlet private weak var groupLabel: UILabel!
     
     let scale = CGAffineTransform(scaleX: 0.9, y: 0.9)
     
@@ -27,5 +27,10 @@ class MyGroupViewCell: UITableViewCell {
         }, completion: { _ in
             self.photoGrp.transform = .identity
         })
+    }
+    
+    func configure(with group: Group, image: UIImage) {
+        photoGrp.image = image
+        groupLabel.text = group.name
     }
 }

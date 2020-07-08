@@ -28,11 +28,13 @@ class MyGroupViewController: UITableViewController {
     //Токен для уведомлений из базы
     var token: NotificationToken?
     var groupsApi = VkApiController()
+    var photoService: PhotoService?
     //var groups = [Group]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        groupsApi.getGroups(controller: self)
+        photoService = PhotoService(container: tableView)
+        //groupsApi.getGroups(controller: self)
         pairTableAndRealm()
     }
     
@@ -49,9 +51,10 @@ class MyGroupViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "MeGroupViewCell", for: indexPath) as! MyGroupViewCell
         
-        cell.groupLabel.text = groups?[indexPath.row].name
-        let url = URL(string: groups?[indexPath.row].image ?? "")
-        cell.photoGrp.image = UIImage(data: try! Data(contentsOf: url!))
+        guard let group = groups?[indexPath.row] else { return cell }
+        let url = group.image
+        guard let image = photoService?.photo(atIndexpath: indexPath, byUrl: url) else { return cell }
+        cell.configure(with: group, image: image)
         return cell
     }
     

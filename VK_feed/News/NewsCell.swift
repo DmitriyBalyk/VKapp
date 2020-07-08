@@ -38,6 +38,7 @@ class NewsCell: UITableViewCell {
         heartCounter.textColor = .black
         
     }
+    
     func configure(with new: NewsFeed) {
         textPost.text = new.text
         viewCounter.text = String(new.views)
@@ -54,6 +55,7 @@ class NewsCell: UITableViewCell {
             animations: {
                 self.heartCounter.text = "0"
         })
+        
         UIView.transition( //анимация цифры
             with:  heartCounter,
             duration: 0.5,
@@ -61,6 +63,7 @@ class NewsCell: UITableViewCell {
             animations: {
                 self.heartCounter.text = "1"
         })
+        
         heartButton.isSelected.toggle()
         heartButton.tintColor = heartButton.isSelected ? .red : .black
         heartCounter.textColor = heartButton.isSelected ? .red : .black

@@ -19,13 +19,8 @@ final class NewsViewBounds: UIImageView {
 
 class NewsController: UITableViewController {
     
-    let news2 = VkApiController()
+    let apiNews = VkApiController()
     var news = [NewsFeed]()
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-    }
     
     override func numberOfSections(in tableView: UITableView) -> Int {
         return news.count
