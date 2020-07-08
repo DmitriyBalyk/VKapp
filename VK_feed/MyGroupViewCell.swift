@@ -15,7 +15,7 @@ class MyGroupViewCell: UITableViewCell {
     
     let scale = CGAffineTransform(scaleX: 0.9, y: 0.9)
     
-    @IBAction func imgGrp() {
+    @IBAction private func imgGrp() {
         
         UIView.animate(withDuration: 0.1,
                        delay: 0,

@@ -10,12 +10,12 @@ import UIKit
 import WebKit
 import Alamofire
 import RealmSwift
-
+import PromiseKit
 
 class VkApiController: UIViewController{
     
     
-    @IBOutlet weak var webView: WKWebView! {
+    @IBOutlet private weak var webView: WKWebView! {
         didSet{
             webView.navigationDelegate = self
         }
@@ -32,7 +32,7 @@ class VkApiController: UIViewController{
             URLQueryItem(name: "client_id", value: "7464677"),
             URLQueryItem(name: "display", value: "mobile"),
             URLQueryItem(name: "redirect_uri", value: "https://oauth.vk.com/blank.html"),
-            URLQueryItem(name: "scope", value: "262150"),
+            URLQueryItem(name: "scope", value: "270342"), //270342 262150
             URLQueryItem(name: "response_type", value: "token"),
             URLQueryItem(name: "v", value: "5.103")
         ]
@@ -106,19 +106,33 @@ extension VkApiController: WKNavigationDelegate {
     
     
     //Получение списка друзей
-    func getFriendsMethod()  {
+    func getFriendsMethod()  -> Promise<[User]> {
         let path = "/method/friends.get"
         let param: Parameters = ["access_token" : Session.instance.token,
                                  "extended" : 1,
                                  "fields": "domain, photo_50, nickname",
                                  "v" : "5.103"]
-        AF.request(Session.instance.baseUrl + path, method: .get,
-                   parameters: param).responseData { [weak self] response in
-                    guard let value = response.value else { return }
-                    let users = try! JSONDecoder().decode(ResponseFriend.self, from: value).response.items
-                    self?.saveData(data: users)
-                    print(Realm.Configuration.defaultConfiguration.fileURL!)
+        let promise = Promise<[User]> { resolver in
+            AF.request(Session.instance.baseUrl + path, method: .get, parameters: param).responseData() { response in
+                switch response.result {
+                case .success(_):
+                    guard let data = response.value else { return }
+                    let users = try! JSONDecoder().decode(ResponseFriend.self, from: data).response.items
+                    resolver.fulfill(users)
+                case .failure(let error):
+                    resolver.reject(error)
+                }
+                
+            }
         }
+        return promise
+        /*AF.request(Session.instance.baseUrl + path, method: .get,
+         parameters: param).responseData { [weak self] response in
+         guard let value = response.value else { return }
+         let users = try! JSONDecoder().decode(ResponseFriend.self, from: value).response.items
+         self?.saveData(data: users)
+         print(Realm.Configuration.defaultConfiguration.fileURL!)
+         }*/
     }
     
     //Получение фотографий человека
@@ -140,18 +154,31 @@ extension VkApiController: WKNavigationDelegate {
     }
     
     //Получение групп текущего пользователя
-    func getGroups() {
+    func getGroups(controller: MyGroupViewController) {
         let path = "/method/groups.get"
         let param: Parameters = ["access_token" : Session.instance.token,
                                  "extended" : 1,
                                  "v" : "5.103"]
-        AF.request(Session.instance.baseUrl + path, method: .get,
-                   parameters: param).responseData { [weak self] response in
-                    guard let value = response.value else { return }
-                    let groups = try! JSONDecoder().decode(ResponsGroup.self, from: value).response.items
-                    self?.saveData(data: groups)
-                    print(Realm.Configuration.defaultConfiguration.fileURL!)
-        }
+        let request = AF.request(Session.instance.baseUrl + path, method: .get, parameters: param)
+        let queue = OperationQueue()
+        
+        let getDataOperation = GetDataOperation(request: request)
+        queue.addOperation(getDataOperation)
+        
+        let parseGroupsData = ParseGroupsData()
+        parseGroupsData.addDependency(getDataOperation)
+        
+        let reloadGroupsTable = ReloadGroupsTable(controller: controller)
+        reloadGroupsTable.addDependency(parseGroupsData)
+        OperationQueue.main.addOperation(reloadGroupsTable)
+        
+        /*         AF.request(Session.instance.baseUrl + path, method: .get,
+         parameters: param).responseData { [weak self] response in
+         guard let value = response.value else { return }
+         let groups = try! JSONDecoder().decode(ResponsGroup.self, from: value).response.items
+         self?.saveData(data: groups)
+         print(Realm.Configuration.defaultConfiguration.fileURL!)
+         }*/
     }
     
     //Получение групп по поисковому запросу
@@ -167,5 +194,20 @@ extension VkApiController: WKNavigationDelegate {
                     print(value)
         }
     }
-    // ["user_id": "21269005", "expires_in": "0", "access_token": "9921f63bf01e20fdc6253117962061e8f04de59d344ed8c2d4865a78618c61abcaa171bcc064e219f9279"]
+    func getNews(completion: @escaping ([NewsFeed]) -> Void) {
+        
+        let methodUrl = "/newsfeed.get"
+        let parameters: Parameters = [
+            "user_ids" : "\(Session.instance.userId)",
+            "access_token" : Session.instance.token,
+            "filters" : "post",
+            "v" : "5.68"
+        ]
+        
+        AF.request(Session.instance.baseUrl + methodUrl, method: .get, parameters: parameters).responseData(queue: DispatchQueue.global()) { response in
+            guard let data = response.value else { return }
+            let news = try! JSONDecoder().decode(NewsResponse.self, from: data).response.items
+            completion(news)
+        }
+    }
 }

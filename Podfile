@@ -10,6 +10,7 @@ pod 'Alamofire', '~> 5.1'
 pod 'RealmSwift'
 pod 'Firebase/Core'
 pod 'Firebase/Database'
+pod "PromiseKit", "~> 6.8"
   # Pods for VK_feed
 
 end

@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import WebKit
 import Alamofire
 import RealmSwift
 import FirebaseDatabase
@@ -33,7 +32,7 @@ class MyGroupViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        groupsApi.getGroups()
+        groupsApi.getGroups(controller: self)
         pairTableAndRealm()
     }
     
@@ -52,7 +51,7 @@ class MyGroupViewController: UITableViewController {
         
         cell.groupLabel.text = groups?[indexPath.row].name
         let url = URL(string: groups?[indexPath.row].image ?? "")
-        cell.photoGrp.image = UIImage(data: try! Data(contentsOf: url!))!
+        cell.photoGrp.image = UIImage(data: try! Data(contentsOf: url!))
         return cell
     }
     

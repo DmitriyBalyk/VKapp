@@ -10,21 +10,24 @@ import UIKit
 
 class NewsCell: UITableViewCell {
     
-    @IBOutlet weak var avatar: UIImageView! // фото юзера/группы
-    @IBOutlet weak var name: UILabel! //Название группы/пользователя
+    @IBOutlet private weak var avatar: UIImageView! // фото юзера/группы
+    @IBOutlet private weak var name: UILabel! //Название группы/пользователя
     @IBOutlet weak var date: UILabel! //время опубликованного поста
-    @IBOutlet weak var comment: UILabel! //Текстовый пост над картинкой
-    @IBOutlet weak var img: UIImageView! //Картинка поста
+    @IBOutlet private weak var textPost: UILabel! //Текстовый пост над картинкой
+    @IBOutlet private weak var img: UIImageView! //Картинка поста
     
-    @IBOutlet weak var heartButton: UIButton! //лайк
-    @IBOutlet weak var heartCounter: UILabel! //счетчик лайков
+    @IBOutlet private weak var heartButton: UIButton! //лайк
+    @IBOutlet private weak var heartCounter: UILabel! //счетчик лайков
     
-    @IBAction func commentButton(_ sender: UIButton) { //кнопка комментариев
+    @IBOutlet weak var commentCounter: UILabel! // счетчик комментариев
+    @IBAction private func commentButton(_ sender: UIButton) { //кнопка комментариев
         print("Кнопка комментария работает")
     }
-    @IBAction func repostButton(_ sender: UIButton) { // кнопка репоста
+    @IBOutlet weak var repostCounter: UILabel! //счетчик репоста
+    @IBAction private func repostButton(_ sender: UIButton) { // кнопка репоста
         print("Кнопка репоста работает")
     }
+    @IBOutlet private weak var viewCounter: UILabel! //счетчик просмотра
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -35,8 +38,15 @@ class NewsCell: UITableViewCell {
         heartCounter.textColor = .black
         
     }
+    func configure(with new: NewsFeed) {
+        textPost.text = new.text
+        viewCounter.text = String(new.views)
+        repostCounter.text = String(new.reposts)
+        commentCounter.text = String(new.comments)
+        heartCounter.text = String(new.likes)
+    }
     
-    @IBAction func like() {
+    @IBAction private func like() {
         UIView.transition( //анимация сердца
             with:  heartButton,
             duration: 0.5,
