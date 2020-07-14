@@ -18,5 +18,6 @@ class Session {
     var token = ""
     var userId = 0
     var baseUrl = "https://api.vk.com"
+    var nextFrom = ""
     
 }

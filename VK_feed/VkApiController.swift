@@ -195,13 +195,14 @@ extension VkApiController: WKNavigationDelegate {
         }
     }
     
-    func getNews(completion: @escaping ([NewsFeed]) -> Void) {
+    func getNews(startFrom: String, completion: @escaping ([NewsFeed]) -> Void) {
         
         let methodUrl = "/newsfeed.get"
         let parameters: Parameters = [
             "user_ids" : "\(Session.instance.userId)",
             "access_token" : Session.instance.token,
-            "filters" : "post",
+            "filters" : "post, photo",
+            "start_from" : startFrom,
             "v" : "5.68"
         ]
         

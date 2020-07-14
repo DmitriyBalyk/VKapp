@@ -7,20 +7,21 @@
 //
 
 import UIKit
-import RealmSwift
 
 struct NewsResponse: Decodable {
     let response: ItemNews
 }
 struct ItemNews: Decodable {
     let items: [NewsFeed]
+    let next_from: String
     
     enum CodingKeys: String, CodingKey {
         case items
+        case next_from
     }
 }
 
-class NewsFeed: Decodable {
+class NewsFeed: Decodable { 
     let sourceID = 0
     let date: Int = 0
     let text: String? = ""

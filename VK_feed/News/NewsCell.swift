@@ -12,7 +12,7 @@ class NewsCell: UITableViewCell {
     
     @IBOutlet private weak var avatar: UIImageView! // фото юзера/группы
     @IBOutlet private weak var name: UILabel! //Название группы/пользователя
-    @IBOutlet weak var date: UILabel! //время опубликованного поста
+    @IBOutlet weak var dateLabel: UILabel! //время опубликованного поста
     @IBOutlet private weak var textPost: UILabel! //Текстовый пост над картинкой
     @IBOutlet private weak var img: UIImageView! //Картинка поста
     
@@ -40,6 +40,7 @@ class NewsCell: UITableViewCell {
     }
     
     func configure(with new: NewsFeed) {
+        dateLabel.text = Date(timeIntervalSince1970: TimeInterval(new.date)).timeAgo(numericDates: false) 
         textPost.text = new.text
         viewCounter.text = String(new.views)
         repostCounter.text = String(new.reposts)
