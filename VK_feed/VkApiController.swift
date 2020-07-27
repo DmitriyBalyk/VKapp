@@ -202,6 +202,7 @@ extension VkApiController: WKNavigationDelegate {
             "user_ids" : "\(Session.instance.userId)",
             "access_token" : Session.instance.token,
             "filters" : "post, photo",
+            "count": 30,
             "start_from" : startFrom,
             "v" : "5.68"
         ]
